@@ -1,9 +1,19 @@
-const http = require("http");
-// provides functionality for spinning up the server
+const express = require("express");
+const morgan = require("morgan"); // Import morgan middleware
+const routes = require("./routes");
 const algorithm = require("./algorithm");
 
-const port = process.env.PORT || 3000;
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-const server = http.createServer();
+app.use(express.json());
 
-server.listen(port);
+// Use morgan middleware for logging HTTP requests
+app.use(morgan("dev"));
+
+app.use("/api", routes);
+app.use("/algorithm", algorithm);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
